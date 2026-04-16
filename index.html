@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Weather App</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+.container{
+width:350px;
+padding:30px;
+border-radius:20px;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+box-shadow:0 8px 32px rgba(0,0,0,0.2);
+text-align:center;
+color:white;
+}
+
+h1{
+margin-bottom:20px;
+font-size:28px;
+}
+
+.search-box{
+display:flex;
+gap:10px;
+margin-bottom:25px;
+}
+
+input{
+flex:1;
+padding:12px;
+border:none;
+border-radius:10px;
+outline:none;
+font-size:16px;
+}
+
+button{
+padding:12px 16px;
+border:none;
+border-radius:10px;
+background:#ffffff;
+color:#333;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
+
+button:hover{
+background:#eaeaea;
+}
+
+.weather-icon{
+font-size:60px;
+margin:15px 0;
+}
+
+.temp{
+font-size:42px;
+font-weight:bold;
+}
+
+.city{
+font-size:26px;
+margin-top:5px;
+}
+
+.details{
+display:flex;
+justify-content:space-between;
+margin-top:25px;
+font-size:16px;
+}
+
+.card{
+background:rgba(255,255,255,0.2);
+padding:10px;
+border-radius:12px;
+width:45%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Weather App</h1>
+
+<div class="search-box">
+<input type="text" id="cityInput" placeholder="Enter city">
+<button onclick="getWeather()">Search</button>
+</div>
+
+<div id="weatherResult">
+
+<div class="weather-icon">☀️</div>
+<div class="temp">--°C</div>
+<div class="city">Search City</div>
+
+<div class="details">
+<div class="card">Humidity<br>--%</div>
+<div class="card">Wind<br>-- km/h</div>
+</div>
+
+</div>
+</div>
+
+<script>
+async function getWeather(){
+
+let city = document.getElementById("cityInput").value;
+
+let apiKey = "594008627ae966b2d68712629089c99d";
+
+let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+let response = await fetch(url);
+let data = await response.json();
+
+let icon = "☀️";
+
+if(data.weather[0].main == "Clouds") icon = "☁️";
+if(data.weather[0].main == "Rain") icon = "🌧️";
+if(data.weather[0].main == "Clear") icon = "☀️";
+if(data.weather[0].main == "Snow") icon = "❄️";
+if(data.weather[0].main == "Thunderstorm") icon = "⛈️";
+
+document.getElementById("weatherResult").innerHTML = `
+<div class="weather-icon">${icon}</div>
+<div class="temp">${data.main.temp}°C</div>
+<div class="city">${data.name}</div>
+
+<div class="details">
+<div class="card">Humidity<br>${data.main.humidity}%</div>
+<div class="card">Wind<br>${data.wind.speed} km/h</div>
+</div>
+`;
+
+}
+</script>
+
+</body>
+</html>
